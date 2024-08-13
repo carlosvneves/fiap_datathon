@@ -1,0 +1,52 @@
+---
+title: Análise de Dados da ONG Passos Mágicos
+authors:
+  - name: Carlos Eduardo Veras Neves
+    affiliation: FIAP - 3DTAT
+    roles: writing
+    corresponding: true
+bibliography: references.bib
+---
+
+
+```{r setup, include=F}
+# | echo: false 
+
+library(tidyverse)
+library(arrow)
+library(skimr)
+library(ggplot2)
+library()
+
+```
+
+
+```{r}
+#| echo: false
+
+df_pooled_0 <- read_parquet('../data/data_pooled_0.parquet') 
+df_clean_0 <- read_parquet('../data/data_clean_0.parquet')
+
+
+```
+
+# Introdução
+
+This is a simple placeholder for the manuscript's main document [@knuth84].
+
+
+# Análise Exploratória
+
+```{r}
+df_pooled_0 |> select() |> head() 
+
+
+```
+
+```{r}
+
+df_clean_0 |> head()
+
+
+```
+
