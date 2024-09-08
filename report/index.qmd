@@ -8,25 +8,20 @@ authors:
 bibliography: references.bib
 ---
 
-
 ```{r setup, include=F}
 # | echo: false 
 
 library(tidyverse)
-library(arrow)
-library(skimr)
 library(ggplot2)
-library()
+library(plm)
 
 ```
-
 
 ```{r}
 #| echo: false
 
-df_pooled_0 <- read_parquet('../data/data_pooled_0.parquet') 
-df_clean_0 <- read_parquet('../data/data_clean_0.parquet')
-
+df_model_complete <- read_csv('../data/df_model_complete.csv') 
+df_model_complete_clean <- read_csv('../data/df_model_complete_tratado.csv')
 
 ```
 
@@ -34,19 +29,69 @@ df_clean_0 <- read_parquet('../data/data_clean_0.parquet')
 
 This is a simple placeholder for the manuscript's main document [@knuth84].
 
-
 # Análise Exploratória
 
 ```{r}
-df_pooled_0 |> select() |> head() 
+#colnames(df_model_complete)
+#
+df <- df_model_complete_clean |> mutate(nome = df_model_complete$nome)  
+
+```
+
+```{r}
+fe_model <-  plm(inde ~ anos_pm + fem + bolsista + ponto_virada +
+                    ipv_pre_processado_resultado + 
+                    ieg_pre_processado_resultado +
+                    ida_pre_processado_resultado + 
+                    rec_ava_1_pre_processado_resultado +
+                    rec_ava_2_pre_processado_resultado + 
+                    rec_ava_3_pre_processado_resultado +
+                    rec_ava_4_pre_processado_resultado, 
+                    data = df,
+                    index = c("nome", "ano"), 
+                    model = "within")
 
 
 ```
 
 ```{r}
+lmtest::coeftest(fe_model, vcov. = vcovHC, type = "HC1")
 
-df_clean_0 |> head()
+```
 
+```{r}
+library(AER)
+```
+
+```{r}
+cor(df_model_complete_clean)
+
+```
+
+
+```{r}
+
+df_2022 <- subset(df, ano == 2022)
+
+ivmodel <- ivreg(inde ~ bolsista + fem + ponto_virada +
+                   ipv_pre_processado_resultado + ieg_pre_processado_resultado +
+                    ida_pre_processado_resultado 
+                 | ieg + ida + ipv + ieg + iaa + ips + 
+                   ipp + ian + + rec_ava_1_pre_processado_resultado +
+                    rec_ava_2_pre_processado_resultado + rec_ava_3_pre_processado_resultado +
+                    rec_ava_4_pre_processado_resultado +
+                     pedra, 
+                  data = df_2022)
+```
+
+```{r}
+coeftest(ivmodel, vcov = vcovHC, type = "HC1")
+
+```
+
+```{r}
+lm(inde ~  bolsista, 
+                  data = df_2022)
 
 ```
 
