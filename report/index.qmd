@@ -46,7 +46,11 @@ fe_model <-  plm(inde ~ anos_pm + fem + bolsista + ponto_virada +
                     rec_ava_1_pre_processado_resultado +
                     rec_ava_2_pre_processado_resultado + 
                     rec_ava_3_pre_processado_resultado +
+<<<<<<< HEAD
                     rec_ava_4_pre_processado_resultado + in_fase, 
+=======
+                    rec_ava_4_pre_processado_resultado, 
+>>>>>>> 382e3e86e0eeaf289b4aaa007dfab154ce1b2f16
                     data = df,
                     index = c("nome", "ano"), 
                     model = "within")
@@ -58,6 +62,7 @@ fe_model <-  plm(inde ~ anos_pm + fem + bolsista + ponto_virada +
 lmtest::coeftest(fe_model, vcov. = vcovHC, type = "HC1")
 
 ```
+<<<<<<< HEAD
 ```{r}
 re_model <-  plm(inde ~ anos_pm + fem + bolsista + ponto_virada +
                     ipv_pre_processado_resultado + 
@@ -71,6 +76,42 @@ re_model <-  plm(inde ~ anos_pm + fem + bolsista + ponto_virada +
                     index = c("nome", "ano"), 
                     model = "random")
 
+=======
+
+```{r}
+library(AER)
+```
+
+```{r}
+cor(df_model_complete_clean)
+
+```
+
+
+```{r}
+
+df_2022 <- subset(df, ano == 2022)
+
+ivmodel <- ivreg(inde ~ bolsista + fem + ponto_virada +
+                   ipv_pre_processado_resultado + ieg_pre_processado_resultado +
+                    ida_pre_processado_resultado 
+                 | ieg + ida + ipv + ieg + iaa + ips + 
+                   ipp + ian + + rec_ava_1_pre_processado_resultado +
+                    rec_ava_2_pre_processado_resultado + rec_ava_3_pre_processado_resultado +
+                    rec_ava_4_pre_processado_resultado +
+                     pedra, 
+                  data = df_2022)
+```
+
+```{r}
+coeftest(ivmodel, vcov = vcovHC, type = "HC1")
+
+```
+
+```{r}
+lm(inde ~  bolsista, 
+                  data = df_2022)
+>>>>>>> 382e3e86e0eeaf289b4aaa007dfab154ce1b2f16
 
 ```
 
